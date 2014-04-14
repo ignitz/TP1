@@ -52,9 +52,15 @@ int main()
             iIndex++;
         }
 
-        // DEBUG
+                // DEBUG
         ImprimeGrafo(&gGrafo);
+
+        TipoGrafo gTemp;
+        gTemp = ArvoreGMinima(&gGrafo);
+        ImprimeGrafo(&gGrafo);
+
         LiberaGrafo(&gGrafo);
+        LiberaGrafo(&gTemp);
     }
 
     return 0;
