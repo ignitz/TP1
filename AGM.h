@@ -3,7 +3,7 @@
 //  Arvore Geradora Minima
 //
 //  Tipo Abstrato de Dados para encontrar a arvore geradora
-//  minima de um grafo utilizando o algoritmo de Djiskra
+//  minima de um grafo utilizando o algoritmo de Prim
 //
 //  Created by Yuri Niitsuma on 12/04/14.
 //  Copyright (c) 2014 Yuri Niitsuma. All rights reserved.
