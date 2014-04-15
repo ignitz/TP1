@@ -47,7 +47,7 @@ int main()
             scanf("%d", &V1);
             scanf("%d", &V2);
             scanf("%d", &iPeso);
-            if(!ExisteAresta(V1,V2, &gGrafo))
+            if(!ExisteAresta(V1,V2, &gGrafo) && V1 != V2)
                 InsereAresta(&V1, &V2, &iPeso, &gGrafo);
             iIndex++;
         }
