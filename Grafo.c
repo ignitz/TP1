@@ -1,7 +1,7 @@
 //
 //  Grafo.c
 //
-//  Tipo Abstrato de Dados retirado do livro
+//  Tipo Abstrato de Dados como base do livro
 //  Projeto de Algoritmos [Nivio Ziviane]
 //
 //  Created by Yuri Niitsuma on 12/04/14.
@@ -10,138 +10,148 @@
 
 #include "Grafo.h"
 
-void FLVazia(TipoLista *Lista)
-{
-    Lista->Primeiro = (TipoApontador) malloc(sizeof(TipoCelula));
-    Lista->Ultimo = Lista->Primeiro;
-    Lista->Primeiro->Prox = NULL;
-}
-
-int Vazia(TipoLista Lista)
-{
-    return (Lista.Primeiro == Lista.Ultimo);
-}
-
-void Insere(TipoItem x, TipoLista *Lista)
-{
-    Lista->Ultimo->Prox = (TipoApontador) malloc(sizeof(TipoCelula));
-    Lista->Ultimo = Lista->Ultimo->Prox;
-    Lista->Ultimo->Item = x;
-    Lista->Ultimo->Prox = NULL;
-}
-
 void FGVazio(TipoGrafo *Grafo)
 {
-    long i;
-    for(i = 0; i < Grafo->NumVertices; i++)
-        FLVazia(&Grafo->Adj[i]);
+    Pointer pAux = (Pointer) malloc(sizeof(Celula));
+    Grafo->Inicial = pAux;
+    Grafo->Inicial->Right = Grafo->Inicial;
+    Grafo->Inicial->Down = Grafo->Inicial;
+    Grafo->Inicial->iMat_i = -1;
+    Grafo->Inicial->iMat_j = -1;
+    Grafo->Inicial->iPeso = NULL;
+    //DEBUG
+//        printf("DEBUG (%d, %d, %d, R(%d, %d), D(%d, %d))\n", pAux->iMat_i, pAux->iMat_j, pAux->iPeso,
+//               pAux->Right->iMat_i, pAux->Right->iMat_j, pAux->Down->iMat_i, pAux->Down->iMat_j);
 }
 
-void InsereAresta(TipoValorVertice *V1,
-                  TipoValorVertice *V2,
-                  TipoPeso *Peso,
-                  TipoGrafo *Grafo)
+void FLCHead(TipoGrafo *Grafo) // Faz Linhas e Colunas cabeca
 {
-    TipoItem x;
-    x.Vertice = *V2;
-    x.Peso = *Peso;
-    Insere(x, &Grafo->Adj[*V1]);
+    int iIndex;
+    // Variaveis auxiliares
+    Pointer pMalloc,
+            pAux;
 
-    // Modificação pra grafo nao-direcionado
-    x.Vertice = *V1;
-    Insere(x, &Grafo->Adj[*V2]);
-}
-
-short ExisteAresta(TipoValorVertice Vertice1,
-                   TipoValorVertice Vertice2,
-                   TipoGrafo *Grafo)
-{
-    TipoApontador Aux;
-    short EncontrouAresta = FALSE;
-    Aux = Grafo->Adj[Vertice1].Primeiro->Prox;
-    while(Aux != NULL && EncontrouAresta == FALSE)
+    // Bloco para gerar as células cabeças da matriz
+    pAux = Grafo->Inicial;
+    iIndex = 0;
+    while(iIndex < Grafo->iNumVertice) // Forma as celulas cabecas das colunas
     {
-        if(Vertice2 == Aux->Item.Vertice)
-            EncontrouAresta = TRUE;
-        Aux = Aux->Prox;
-    }
-    return EncontrouAresta;
-}
-
-/* Operadores para obter a lista de adjacentes */
-short ListaAdjVazia(TipoValorVertice *Vertice,
-                    TipoGrafo *Grafo)
-{
-    return (Grafo->Adj[*Vertice].Primeiro == Grafo->Adj[*Vertice].Ultimo);
-}
-
-void ProxAdj(TipoValorVertice *Vertice,
-             TipoGrafo *Grafo,
-             TipoValorVertice *Adj,
-             TipoPeso *Peso,
-             TipoApontador *Prox,
-             short *FimListaAdj)
-{
-    /* Retorna Adj e Peso do Item apontado por Prox */
-    *Adj = (*Prox)->Item.Vertice;
-    *Peso = (*Prox)->Item.Peso;
-    *Prox = (*Prox)->Prox;
-    if(*Prox == NULL)
-        *FimListaAdj = TRUE;
-}
-
-void Retira(TipoApontador p,
-            TipoLista *Lista,
-            TipoItem *Item)
-{
-    /* O item a ser retirado e o seguinte ao ser apontado por p-- */
-    TipoApontador q;
-    if(Vazia(*Lista) || p == NULL || p->Prox == NULL)
-    {
-        printf("Erro: Lista vazia ou posicao nao existe\n");
-        return;
-    }
-    q = p->Prox;
-    *Item = q->Item;
-    p->Prox = q->Prox;
-    if(p->Prox == NULL) Lista->Ultimo = p;
-    free(q);
-}
-
-void LiberaGrafo(TipoGrafo *Grafo)
-{
-    TipoApontador AuxAnterior, Aux; long i;
-    for(i = 0; i< Grafo->NumVertices; i++)
-    {
-        Aux = Grafo->Adj[i].Primeiro->Prox;
-        free(Grafo->Adj[i].Primeiro); // Libera celula cabeça
-        Grafo->Adj[i].Primeiro = NULL;
-        while(Aux != NULL)
+        pMalloc = (Pointer) malloc(sizeof(Celula));
+        pAux->Right = pMalloc; // Aponta pra nova celula
+        pMalloc->Right = Grafo->Inicial; // Ultima celula aponta pra Inicial
+        pMalloc->Down = pMalloc; // Ponteiro cabeca coluna aponta pra ela mesma
+        if(pAux->Right != Grafo->Inicial) // Define coordenadas
         {
-            AuxAnterior = Aux;
-            Aux = Aux->Prox;
-            free(AuxAnterior);
-        }
-    }
-    Grafo->NumVertices = 0;
-}
+            pAux->Right->iMat_i = iIndex;
+            pAux->Right->iMat_j = -1;
+            pAux->Right->iPeso = NULL;
+        } // fim do if
+
+        pAux = pAux->Right; // Caminha pra direita
+        iIndex++;
+
+        //DEBUG
+        // printf("DEBUG (%d, %d, %d, R(%d, %d), D(%d, %d))\n", pAux->iMat_i, pAux->iMat_j, pAux->iPeso,
+        //        pAux->Right->iMat_i, pAux->Right->iMat_j, pAux->Down->iMat_i, pAux->Down->iMat_j);
+
+    } // fim do while da coluna
+
+    pAux = Grafo->Inicial;
+    iIndex = 0;
+    while(iIndex < Grafo->iNumVertice) // Forma as celulas cabecas das linhas
+    {
+        pMalloc = (Pointer) malloc(sizeof(Celula));
+        pAux->Down = pMalloc; // Aponta pra nova celula
+        pMalloc->Down = Grafo->Inicial; // Ultima celula aponta pra Inicial
+        pMalloc->Right = pMalloc; // Ponteiro cabeca linha aponta pra ela mesma
+        if(pAux->Down != Grafo->Inicial) // Define coordenadas
+        {
+            pAux->Down->iMat_i = -1;
+            pAux->Down->iMat_j = iIndex;
+            pAux->Down->iPeso = NULL;
+        } // fim do if
+
+        pAux = pAux->Down; // Caminha pra baixo
+        iIndex++;
+//DEBUG
+//        printf("DEBUG (%d, %d, %d, R(%d, %d), D(%d, %d))\n", pAux->iMat_i, pAux->iMat_j, pAux->iPeso,
+//               pAux->Right->iMat_i, pAux->Right->iMat_j, pAux->Down->iMat_i, pAux->Down->iMat_j);
+
+    } // fim do while da linha
+} // fim do Bloco
+
+// Insere uma aresta com peso entre os vertices
+void InsereCelula(TipoGrafo *Grafo, int *iVertice_I, int *iVertice_J, int *iPeso)
+{
+    int iIndex_I, iIndex_J;
+    Pointer pMalloc = (Pointer) malloc(sizeof(Celula));
+    Pointer pAux = Grafo->Inicial;
+
+    iIndex_J = 0;
+    while(iIndex_J < *iVertice_J)
+    {
+        pAux = pAux->Down; // Caminha pra baixo
+        iIndex_J++;
+    } // fim do while
+
+    if(pAux->Right != pAux)
+        while(pAux->iMat_i < *iVertice_I)
+            pAux = pAux->Right; // Caminha pra Direita
+    // Efetua troca dos ponteiros
+    pMalloc->Right = pAux->Down->Right;
+    pAux->Right = pMalloc;
+
+    pAux = Grafo->Inicial;
+
+    iIndex_I = 0;
+    while(iIndex_I < *iVertice_I)
+    {
+        pAux = pAux->Right; // Caminha pra direita
+        iIndex_I++;
+    } // fim do while
+
+    if(pAux->Down != pAux)
+        while(pAux->iMat_j < *iVertice_J)
+            pAux = pAux->Down; // Caminha pra Baixo
+    // Efetua troca dos ponteiros
+    pMalloc->Down = pAux->Right->Down;
+    pAux->Down = pMalloc;
+
+    pMalloc->iMat_i = *iVertice_I;
+    pMalloc->iMat_j = *iVertice_J;
+    pMalloc->iPeso = *iPeso;
+
+    //DEBUG
+        printf("DEBUG (%d, %d, %d, R(%d, %d), D(%d, %d))\n", pMalloc->iMat_i, pMalloc->iMat_j, pMalloc->iPeso,
+               pMalloc->Right->iMat_i, pMalloc->Right->iMat_j, pMalloc->Down->iMat_i, pMalloc->Down->iMat_j);
+
+} // fim do InsereCelula
 
 void ImprimeGrafo(TipoGrafo *Grafo)
 {
-    int i;
-    TipoApontador Aux;
-    for(i = 0; i < Grafo->NumVertices; i++)
+    Pointer pAux;
+    Pointer pAux_Fix = Grafo->Inicial->Down;
+    while( pAux_Fix != Grafo->Inicial )
     {
-        printf("Vertice%2d: ", i);
-        if(!Vazia(Grafo->Adj[i]))
+        pAux = pAux_Fix->Right;
+
+        printf("Vertice(%d): ", pAux->iMat_j);
+        while(pAux->iMat_i != pAux_Fix->iMat_i) //
         {
-            Aux = Grafo->Adj[i].Primeiro->Prox;
-            while(Aux != NULL)
-            {
-                printf("%3d (%d)", Aux->Item.Vertice, Aux->Item.Peso);
-                Aux = Aux->Prox;
-            }
-        }
-        putchar('\n');
-    }
-}
+            printf("(%d, %d, %d)\n", pAux->iMat_i, pAux->iMat_j, pAux->iPeso);
+
+            //DEBUG
+            printf("DEBUG (%d, %d, %d, R(%d, %d), D(%d, %d))\n", pAux->iMat_i, pAux->iMat_j, pAux->iPeso,
+            pAux->Right->iMat_i, pAux->Right->iMat_j, pAux->Down->iMat_i, pAux->Down->iMat_j);
+
+            pAux = pAux->Right;
+        } // fim do while
+
+        printf("\n");
+        pAux_Fix = pAux_Fix->Down; // Caminha pra baixo
+        //DEBUG
+        // printf("DEBUG (%d, %d, %d, R(%d, %d), D(%d, %d))\n", pAux->iMat_i, pAux->iMat_j, pAux->iPeso,
+        //       pAux->Right->iMat_i, pAux->Right->iMat_j, pAux->Down->iMat_i, pAux->Down->iMat_j);
+
+    } // fim do While
+} // fim do ImprimeGrafo

@@ -17,51 +17,36 @@
 
 int main()
 {
-    TipoGrafo gGrafo;
+    int iIndex, // Contador
+        iAux, // var auxiliar
+        // Var de leitura
+        iVertice1,
+        iVertice2,
+        iPeso;
 
-    int iNumVertices,
-        iNumArestas;
-    int iIndex;
 
-    //DEBUG
-    int iTeste, iIndexTest;
+    TipoGrafo Grafo;
+    FGVazio(&Grafo);
 
-    TipoValorVertice V1, V2;
+    scanf("%d %d",&Grafo.iNumVertice, &Grafo.iNumArestas); // Numero de vertices e numero de arestas do grafo
+    FLCHead(&Grafo); // Faz Linhas e Colunas cabeca da matriz por listas
 
-    TipoPeso iPeso;
-
-    scanf("%d", &iTeste); // DEBUG
-
-    for(iIndexTest = 1; iIndexTest <= iTeste; iIndexTest++)
+    iIndex = 0;
+    while(iIndex < Grafo.iNumArestas)
     {
-        scanf("%d %d", &iNumVertices, &iNumArestas);
+        scanf("%d %d %d", &iVertice1, &iVertice2, &iPeso); // Leitura dos vertices e peso
+        if(iVertice1 > iVertice2) { // Troca pra ordem crescente do vertice
+            iAux = iVertice1;
+            iVertice1 = iVertice2;
+            iVertice2 = iAux;
+        } // fim do if
+        if(Grafo.Inicial != Grafo.Inicial->Right) // Verifica se é vazio
+            InsereCelula(&Grafo, &iVertice1, &iVertice2, &iPeso);
+        iIndex++;
+    } // fim do while
 
-        gGrafo.NumVertices = iNumVertices;
-        FGVazio(&gGrafo);
-
-        printf("\nTeste %d\n", iIndexTest); // DEBUG
-
-        iIndex = 0;
-        while(iIndex < iNumArestas)
-        {
-            scanf("%d", &V1);
-            scanf("%d", &V2);
-            scanf("%d", &iPeso);
-            if(!ExisteAresta(V1,V2, &gGrafo) && V1 != V2)
-                InsereAresta(&V1, &V2, &iPeso, &gGrafo);
-            iIndex++;
-        }
-
-                // DEBUG
-        ImprimeGrafo(&gGrafo);
-
-        TipoGrafo gTemp;
-        gTemp = ArvoreGMinima(&gGrafo);
-        ImprimeGrafo(&gGrafo);
-
-        LiberaGrafo(&gGrafo);
-        LiberaGrafo(&gTemp);
-    }
+    // DEBUG
+    ImprimeGrafo(&Grafo);
 
     return 0;
-}
+} // fim do main

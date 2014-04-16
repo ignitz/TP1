@@ -13,60 +13,30 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <sys/time.h>
-
-#define MAXNUMVERTICES 100
-#define MAXNUMARESTAS 4500
+#include <sys/time.h> /** Usado pra Seed Random*/
 
 #define FALSE 0
 #define TRUE 1
 
-typedef int TipoValorVertice;
-typedef int TipoPeso;
-typedef struct TipoItem {
-    TipoValorVertice Vertice;
-    TipoPeso Peso;
-} TipoItem;
-
-typedef struct TipoCelula *TipoApontador;
-typedef struct TipoCelula {
-    TipoItem Item;
-    TipoApontador Prox;
-} TipoCelula;
-
-typedef struct TipoLista {
-    TipoApontador Primeiro, Ultimo;
-} TipoLista;
+typedef struct Celula_str *Pointer;
+typedef struct Celula_str {
+    // Coordenadas da Matriz
+    int iMat_i,
+        iMat_j;
+    Pointer Right, Down;
+    int iPeso;
+} Celula;
 
 typedef struct TipoGrafo {
-    TipoLista Adj[MAXNUMVERTICES + 1];
-    TipoValorVertice NumVertices;
-    short NumArestas;
+    int iNumVertice,
+        iNumArestas;
+    Pointer Inicial;
 } TipoGrafo;
 
 #endif // GRAFO_H_INCLUDED
 
 // Lista de funções
-void FGVazio(TipoGrafo *Grafo);
-
-void InsereAresta(TipoValorVertice *V1,
-                  TipoValorVertice *V2,
-                  TipoPeso *Peso,
-                  TipoGrafo *Grafo);
-
-short ExisteAresta(TipoValorVertice Vertice1,
-                   TipoValorVertice Vertice2,
-                   TipoGrafo *Grafo);
-
-short ListaAdjVazia(TipoValorVertice *Vertice,
-                    TipoGrafo *Grafo);
-
-void ProxAdj(TipoValorVertice *Vertice,
-             TipoGrafo *Grafo,
-             TipoValorVertice *Adj,
-             TipoPeso *Peso,
-             TipoApontador *Prox,
-             short *FimListaAdj);
-
-void LiberaGrafo(TipoGrafo *Grafo);
-void ImprimeGrafo(TipoGrafo *Grafo);
+void FGVazio(TipoGrafo *Grafo); // Cria um grafo vazio
+void FLCHead(TipoGrafo *Grafo); // Faz Linhas e Colunas cabeca
+void InsereCelula(TipoGrafo *Grafo, int *iVertice_I, int *iVertice_J, int *iPeso); // Insere um peso entre os vertices
+void ImprimeGrafo(TipoGrafo *Grafo); // Imprime os pesos das arestas

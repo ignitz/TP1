@@ -18,5 +18,3 @@
 #include "Grafo.h"
 
 #endif // AGM_H_INCLUDED
-
-TipoGrafo ArvoreGMinima(TipoGrafo *Grafo);
