@@ -17,36 +17,35 @@
 
 int main()
 {
-    int iIndex, // Contador
-        iAux, // var auxiliar
-        // Var de leitura
-        iVertice1,
-        iVertice2,
-        iPeso;
-
-
     TipoGrafo Grafo;
+    long iIndex; // Contador
+    int iAux, // Variavel para troca
+        V1, // Vertice 1 leitura
+        V2, // Vertice 2 leitura
+        iPeso; // Peso da aresta
+
+    scanf("%d %d", &Grafo.iNumVertices, &Grafo.iNumArestas);
     FGVazio(&Grafo);
 
-    scanf("%d %d",&Grafo.iNumVertice, &Grafo.iNumArestas); // Numero de vertices e numero de arestas do grafo
-    FLCHead(&Grafo); // Faz Linhas e Colunas cabeca da matriz por listas
-
     iIndex = 0;
-    while(iIndex < Grafo.iNumArestas)
-    {
-        scanf("%d %d %d", &iVertice1, &iVertice2, &iPeso); // Leitura dos vertices e peso
-        if(iVertice1 > iVertice2) { // Troca pra ordem crescente do vertice
-            iAux = iVertice1;
-            iVertice1 = iVertice2;
-            iVertice2 = iAux;
+    while(iIndex < Grafo.iNumArestas) {
+        scanf("%d %d %d", &V1, &V2, &iPeso);
+        if( V1 > V2 ) { // Efetua troca para V1 <= V2
+            iAux = V1;
+            V1 = V2;
+            V2 = iAux;
         } // fim do if
-        if(Grafo.Inicial != Grafo.Inicial->Right) // Verifica se é vazio
-            InsereCelula(&Grafo, &iVertice1, &iVertice2, &iPeso);
+
+        InsereAresta(&Grafo, &V1, &V2, &iPeso);
+        Imprime(&Grafo);
+        InsereAresta(&Grafo, &V2, &V1, &iPeso); // Grafo direcionado na direcao oposta
+        Imprime(&Grafo);
         iIndex++;
     } // fim do while
 
-    // DEBUG
-    ImprimeGrafo(&Grafo);
+    // Teste de Impressao dos vertices
+
+    Imprime(&Grafo);
 
     return 0;
-} // fim do main
+}

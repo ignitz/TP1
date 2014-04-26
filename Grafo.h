@@ -18,25 +18,36 @@
 #define FALSE 0
 #define TRUE 1
 
+/*
+ _______________            _______________
+| iPeso | Right | -------->| iPeso | Right | --------> ...
+|_______|_______|          |_______|_______|
+
+*/
+
+typedef struct TipoItem {
+    int Vertice,
+        iPeso;
+} TipoItem;
+
 typedef struct Celula_str *Pointer;
 typedef struct Celula_str {
-    // Coordenadas da Matriz
-    int iMat_i,
-        iMat_j;
-    Pointer Right, Down;
-    int iPeso;
+    TipoItem Item;
+    Pointer Next;
 } Celula;
 
+typedef struct TipoLista {
+    Pointer First;
+} TipoLista;
+
 typedef struct TipoGrafo {
-    int iNumVertice,
-        iNumArestas;
-    Pointer Inicial;
+    int iNumVertices, iNumArestas;
+    TipoLista *Adj;
 } TipoGrafo;
 
 #endif // GRAFO_H_INCLUDED
 
 // Lista de funções
-void FGVazio(TipoGrafo *Grafo); // Cria um grafo vazio
-void FLCHead(TipoGrafo *Grafo); // Faz Linhas e Colunas cabeca
-void InsereCelula(TipoGrafo *Grafo, int *iVertice_I, int *iVertice_J, int *iPeso); // Insere um peso entre os vertices
-void ImprimeGrafo(TipoGrafo *Grafo); // Imprime os pesos das arestas
+void FGVazio(TipoGrafo *Grafo);
+void InsereAresta(TipoGrafo *Grafo, int *V1, int *V2, int *iPeso);
+void Imprime(TipoGrafo *Grafo);
