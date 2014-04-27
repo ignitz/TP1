@@ -12,18 +12,23 @@
 
 void FGVazio(TipoGrafo *Grafo)
 {
-    Grafo->Adj = (TipoLista *) malloc( sizeof(TipoLista)*Grafo->iNumVertices );
+    Grafo->bZeroOROne = 0;
+    Grafo->Adj = (TipoLista *) malloc( sizeof(TipoLista)*Grafo->iNumVertices + 1);
 
-    long iIndex;
-    for(iIndex = 0; iIndex < Grafo->iNumVertices; iIndex++)
+    int iIndex;
+    for(iIndex = 0; iIndex <= Grafo->iNumVertices; iIndex++)
     {
         Grafo->Adj[iIndex].Next = NULL;
     } // fim do for
+
     return;
 } // fim do FGVazio
 
 void InsereAresta(TipoGrafo *Grafo, int *V1, int *V2, int *iPeso)
 {
+    if(*V2 == Grafo->iNumVertices)
+        Grafo->bZeroOROne = 1;
+
     if(Grafo->Adj[*V1].Next == NULL)   // Se o vertice nao contem nenhuma aresta
     {
         Pointer Cell;
@@ -33,6 +38,7 @@ void InsereAresta(TipoGrafo *Grafo, int *V1, int *V2, int *iPeso)
         Grafo->Adj[*V1].Next = Cell;
         Cell->Next = NULL;
     } // fim do if
+
     else   // Se o vertice ja contem pelo menos uma aresta
     {
         Pointer Cell, // Para a nova celula
@@ -52,13 +58,16 @@ void InsereAresta(TipoGrafo *Grafo, int *V1, int *V2, int *iPeso)
                     Grafo->Adj[*V1].Next = Cell;
                     Cell->Next = NULL;
                 } // fim do if(Grafo->Adj[*V1].Next == NULL)
+
                 else
                 {
                     Prev->Next = Cell;
                     Cell->Next = NULL;
                 } // fim do else
+
                 break;
             } // fim do if
+
             else
             {
                 if(*V2 <= Aux->Item.Vertice)
@@ -68,38 +77,45 @@ void InsereAresta(TipoGrafo *Grafo, int *V1, int *V2, int *iPeso)
                         Grafo->Adj[*V1].Next = Cell;
                         Cell->Next = Aux;
                     } // fim do if(Grafo->Adj[*V1].Next == Aux)
+
                     else
                     {
                         Prev->Next = Cell;
                         Cell->Next = Aux;
                     } // fim do else
+
                     break;
                 } // fim do if
+
             } // fim do else
+
             Prev = Aux;
             Aux = Aux->Next; // Passa para a proxima celula
         } while(1);
+
     } // fim do else
+
     return;
+
 } // fim do InsereAresta
 
 void Imprime(TipoGrafo *Grafo)
 {
-    int iIndex = 0;
+    int iIndex = Grafo->bZeroOROne;
 
     Pointer Aux;
-
-    while(iIndex < Grafo->iNumVertices)
+    while(iIndex < Grafo->iNumVertices + Grafo->bZeroOROne)
     {
         Aux = Grafo->Adj[iIndex].Next;
-        printf("Vertice(%d): ", iIndex);
+
         while(Aux != NULL)
         {
-            printf("(%d,%d) ", Aux->Item.Vertice, Aux->Item.iPeso);
+            if(iIndex < Aux->Item.Vertice)
+                printf("%d %d %d\n", iIndex, Aux->Item.Vertice, Aux->Item.iPeso);
             Aux = Aux->Next;
         } // fim do while
-        iIndex++;
-        printf("\n");
 
+        iIndex++;
     } // fim do while
+
 } // fim do Imprime

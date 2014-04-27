@@ -18,3 +18,6 @@
 #include "Grafo.h"
 
 #endif // AGM_H_INCLUDED
+
+void ArvoreMin(TipoGrafo *Grafo, TipoGrafo *Grafo_min);
+void ImprimeMIN(TipoGrafo *Grafo);

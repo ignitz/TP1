@@ -41,6 +41,7 @@ typedef struct TipoLista {
 } TipoLista;
 
 typedef struct TipoGrafo {
+    int bZeroOROne;
     int iNumVertices, iNumArestas;
     TipoLista *Adj;
 } TipoGrafo;
