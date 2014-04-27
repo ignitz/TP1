@@ -37,9 +37,9 @@ int main()
         } // fim do if
 
         InsereAresta(&Grafo, &V1, &V2, &iPeso);
-        Imprime(&Grafo);
+        // Imprime(&Grafo);
         InsereAresta(&Grafo, &V2, &V1, &iPeso); // Grafo direcionado na direcao oposta
-        Imprime(&Grafo);
+        // Imprime(&Grafo);
         iIndex++;
     } // fim do while
 

@@ -37,7 +37,7 @@ typedef struct Celula_str {
 } Celula;
 
 typedef struct TipoLista {
-    Pointer First;
+    Pointer Next;
 } TipoLista;
 
 typedef struct TipoGrafo {

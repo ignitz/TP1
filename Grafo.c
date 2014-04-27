@@ -17,20 +17,20 @@ void FGVazio(TipoGrafo *Grafo)
     long iIndex;
     for(iIndex = 0; iIndex < Grafo->iNumVertices; iIndex++)
     {
-        Grafo->Adj[iIndex].First = NULL;
+        Grafo->Adj[iIndex].Next = NULL;
     } // fim do for
     return;
 } // fim do FGVazio
 
 void InsereAresta(TipoGrafo *Grafo, int *V1, int *V2, int *iPeso)
 {
-    if(Grafo->Adj[*V1].First == NULL)   // Se o vertice nao contem nenhuma aresta
+    if(Grafo->Adj[*V1].Next == NULL)   // Se o vertice nao contem nenhuma aresta
     {
         Pointer Cell;
         Cell = (Pointer) malloc(sizeof(Celula));
         Cell->Item.Vertice = *V2;
         Cell->Item.iPeso = *iPeso;
-        Grafo->Adj[*V1].First = Cell;
+        Grafo->Adj[*V1].Next = Cell;
         Cell->Next = NULL;
     } // fim do if
     else   // Se o vertice ja contem pelo menos uma aresta
@@ -42,35 +42,43 @@ void InsereAresta(TipoGrafo *Grafo, int *V1, int *V2, int *iPeso)
         Cell->Item.Vertice = *V2;
         Cell->Item.iPeso = *iPeso;
 
-        Aux = Grafo->Adj[*V1].First;
+        Aux = Grafo->Adj[*V1].Next;
 
-        if(*V2 <= Aux->Item.Vertice)   // Caso seja o primeiro da lista
-        {
-            Cell->Next = Grafo->Adj[*V1].First;
-            Grafo->Adj[*V1].First = Cell;
-        } // fim do if
-
-        Prev = Aux;
-        Aux = Aux->Next;
-
-        do
-        {
-            if(Aux == NULL) // Trata se o segundo ponteiro e nulo
+        do {
+            if(Aux == NULL) // Inserido no final da lista
             {
-                Prev->Next = Cell;
-                Cell->Next = NULL;
+                if(Grafo->Adj[*V1].Next == NULL) // Tratamento no inicio da lista
+                {
+                    Grafo->Adj[*V1].Next = Cell;
+                    Cell->Next = NULL;
+                } // fim do if(Grafo->Adj[*V1].Next == NULL)
+                else
+                {
+                    Prev->Next = Cell;
+                    Cell->Next = NULL;
+                } // fim do else
                 break;
             } // fim do if
-            if(*V2 <= Aux->Item.Vertice)   // Insere a celula no meio da lista
+            else
             {
-                Cell->Next = Aux;
-                Prev->Next = Cell;
-                break;
-            } // fim do if
-
+                if(*V2 <= Aux->Item.Vertice)
+                {
+                    if(Grafo->Adj[*V1].Next == Aux) // Tratamento no inicio da lista
+                    {
+                        Grafo->Adj[*V1].Next = Cell;
+                        Cell->Next = Aux;
+                    } // fim do if(Grafo->Adj[*V1].Next == Aux)
+                    else
+                    {
+                        Prev->Next = Cell;
+                        Cell->Next = Aux;
+                    } // fim do else
+                    break;
+                } // fim do if
+            } // fim do else
             Prev = Aux;
-            Aux = Aux->Next;
-        } while (Aux != NULL); // fim do while
+            Aux = Aux->Next; // Passa para a proxima celula
+        } while(1);
     } // fim do else
     return;
 } // fim do InsereAresta
@@ -83,7 +91,7 @@ void Imprime(TipoGrafo *Grafo)
 
     while(iIndex < Grafo->iNumVertices)
     {
-        Aux = Grafo->Adj[iIndex].First;
+        Aux = Grafo->Adj[iIndex].Next;
         printf("Vertice(%d): ", iIndex);
         while(Aux != NULL)
         {
