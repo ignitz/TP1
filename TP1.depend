@@ -1,16 +1,16 @@
 # depslib dependency file v1.0
-1398635280 source:d:\yuri\documents\github\tp1\main.c
+1398639132 source:d:\yuri\documents\github\tp1\main.c
 	<stdio.h>
 	<stdlib.h>
 	"Grafo.h"
 	"AGM.h"
 
-1398632939 d:\yuri\documents\github\tp1\grafo.h
+1398637540 d:\yuri\documents\github\tp1\grafo.h
 	<stdlib.h>
 	<stdio.h>
 	<sys/time.h>
 
-1398635859 source:d:\yuri\documents\github\tp1\grafo.c
+1398640302 source:d:\yuri\documents\github\tp1\grafo.c
 	"Grafo.h"
 
 1398629018 d:\yuri\documents\github\tp1\agm.h
@@ -18,6 +18,6 @@
 	<stdlib.h>
 	"Grafo.h"
 
-1398635717 source:d:\yuri\documents\github\tp1\agm.c
+1398639800 source:d:\yuri\documents\github\tp1\agm.c
 	"AGM.h"
 

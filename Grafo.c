@@ -12,10 +12,12 @@
 
 void FGVazio(TipoGrafo *Grafo)
 {
-    Grafo->bZeroOROne = 0;
+    Grafo->bZeroOROne = 0; // Identificador inicial para Vertice 0
+    // Adiciona uma lista de adjacencia de 0 ate n com n+1 vertices
     Grafo->Adj = (TipoLista *) malloc( sizeof(TipoLista)*Grafo->iNumVertices + 1);
 
     int iIndex;
+    // Gera o grafo com 0 arestas
     for(iIndex = 0; iIndex <= Grafo->iNumVertices; iIndex++)
     {
         Grafo->Adj[iIndex].Next = NULL;
@@ -26,10 +28,13 @@ void FGVazio(TipoGrafo *Grafo)
 
 void InsereAresta(TipoGrafo *Grafo, int *V1, int *V2, int *iPeso)
 {
+    // Se vertice de entrada for n de um grafo de n vertices entao
+    // ignora o vertice zero para adicionar o vertice n
     if(*V2 == Grafo->iNumVertices)
         Grafo->bZeroOROne = 1;
 
-    if(Grafo->Adj[*V1].Next == NULL)   // Se o vertice nao contem nenhuma aresta
+    // Se o vertice nao contem nenhuma aresta adiciona o primeiro
+    if(Grafo->Adj[*V1].Next == NULL)
     {
         Pointer Cell;
         Cell = (Pointer) malloc(sizeof(Celula));
@@ -44,6 +49,8 @@ void InsereAresta(TipoGrafo *Grafo, int *V1, int *V2, int *iPeso)
         Pointer Cell, // Para a nova celula
                 Aux, // Ponteiro pra andar na lista
                 Prev; // Ponteiro auxiliar para guardar o ponteiro da celula anterior
+
+        // Cria uma celula representando uma aresta
         Cell = (Pointer) malloc(sizeof(Celula));
         Cell->Item.Vertice = *V2;
         Cell->Item.iPeso = *iPeso;
@@ -59,7 +66,7 @@ void InsereAresta(TipoGrafo *Grafo, int *V1, int *V2, int *iPeso)
                     Cell->Next = NULL;
                 } // fim do if(Grafo->Adj[*V1].Next == NULL)
 
-                else
+                else // Fora do inicio da lista
                 {
                     Prev->Next = Cell;
                     Cell->Next = NULL;
@@ -70,13 +77,13 @@ void InsereAresta(TipoGrafo *Grafo, int *V1, int *V2, int *iPeso)
 
             else
             {
-                if(*V2 <= Aux->Item.Vertice)
+                if(*V2 <= Aux->Item.Vertice) // Se eh adicionado da segunda celula em diante
                 {
                     if(Grafo->Adj[*V1].Next == Aux) // Tratamento no inicio da lista
                     {
                         Grafo->Adj[*V1].Next = Cell;
                         Cell->Next = Aux;
-                    } // fim do if(Grafo->Adj[*V1].Next == Aux)
+                    } // fim do if(Grafo->Adj[*V1]...
 
                     else
                     {
@@ -85,7 +92,7 @@ void InsereAresta(TipoGrafo *Grafo, int *V1, int *V2, int *iPeso)
                     } // fim do else
 
                     break;
-                } // fim do if
+                } // fim do if(*V2 <= Aux->...
 
             } // fim do else
 
@@ -99,6 +106,8 @@ void InsereAresta(TipoGrafo *Grafo, int *V1, int *V2, int *iPeso)
 
 } // fim do InsereAresta
 
+// Funcao que varre toda a lista de adjacencia imprimindo todas as arestas
+// V1 e V2 tal que V1 < V2
 void Imprime(TipoGrafo *Grafo)
 {
     int iIndex = Grafo->bZeroOROne;
